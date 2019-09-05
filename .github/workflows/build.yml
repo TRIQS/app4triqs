@@ -2,9 +2,9 @@ name: build
 
 on:
   push:
-    branches: [ unstable ]
+    branches: [ unstable, cpp_only ]
   pull_request:
-    branches: [ unstable ]
+    branches: [ unstable, cpp_only ]
   workflow_call:
   workflow_dispatch:
 
