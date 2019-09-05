@@ -2,9 +2,9 @@ name: build
 
 on:
   push:
-    branches: [ unstable ]
+    branches: [ unstable, cpp_only ]
   pull_request:
-    branches: [ unstable ]
+    branches: [ unstable, cpp_only ]
 
 jobs:
   build:
@@ -73,7 +73,7 @@ jobs:
       run: |
         git clone https://github.com/TRIQS/triqs --branch unstable
         mkdir triqs/build && cd triqs/build
-        cmake .. -DBuild_Tests=OFF -DCMAKE_INSTALL_PREFIX=$HOME/install
+        cmake .. -DBuild_Tests=OFF -DPythonSupport=OFF -DCMAKE_INSTALL_PREFIX=$HOME/install
         make -j1 install VERBOSE=1
         cd ../
 
