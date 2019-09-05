@@ -2,9 +2,9 @@ name: build
 
 on:
   push:
-    branches: [ notriqs ]
+    branches: [ cpp_only_notriqs ]
   pull_request:
-    branches: [ notriqs ]
+    branches: [ cpp_only_notriqs ]
   workflow_call:
   workflow_dispatch:
 
@@ -72,6 +72,7 @@ jobs:
         python3-clang-15
         python3-dev
         python3-mako
+        python3-matplotlib
         python3-mpi4py
         python3-numpy
         python3-pip
