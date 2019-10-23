@@ -5,7 +5,7 @@ using namespace app4triqs;
 
 TEST(Toto, Add) { // NOLINT
 
-  toto a(0);
+  toto a(1);
   toto b(2);
 
   auto c = a + b;
