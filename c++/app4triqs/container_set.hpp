@@ -21,6 +21,7 @@
  ******************************************************************************/
 #pragma once
 #include "./types.hpp"
+#include <optional>
 
 namespace app4triqs {
 
