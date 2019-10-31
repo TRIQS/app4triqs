@@ -20,6 +20,7 @@
  *
  ******************************************************************************/
 #pragma once
+#include "./qmc_config.hpp"
 #include "./params.hpp"
 
 namespace app4triqs {

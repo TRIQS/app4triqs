@@ -20,7 +20,13 @@
  *
  ******************************************************************************/
 #include "./solver_core.hpp"
+
 #include "./post_process.hpp"
+#include "./measures/simple.hpp"
+#include "./moves/update.hpp"
+
+#include <triqs/utility/callbacks.hpp>
+#include <triqs/mc_tools/mc_generic.hpp>
 
 namespace app4triqs {
 
@@ -54,7 +60,23 @@ namespace app4triqs {
     // Reset the results
     container_set::operator=(container_set{});
 
-    // TODO Solve the impurity model
+    // Construct the generic Monte-Carlo solver
+    triqs::mc_tools::mc_generic<mc_weight_t> mc(params.random_name, params.random_seed, params.verbosity);
+
+    // Capture random number generator
+    auto &rng = mc.get_rng();
+
+    // Create Monte-Carlo configuration
+    qmc_config_t qmc_config{params};
+
+    mc.add_move(moves::insert{qmc_config, rng}, "simple move");
+
+    // Register all measurements
+    if (params.measure_simple) mc.add_measure(measures::simple{params, qmc_config, result_set()}, "simple measure");
+
+    // Perform QMC run and collect results
+    mc.warmup_and_accumulate(params.n_warmup_cycles, params.n_cycles, params.length_cycle, triqs::utility::clock_callback(params.max_time));
+    mc.collect_results(world);
 
     // Post Processing
     if (params.post_process) { post_process(params); }

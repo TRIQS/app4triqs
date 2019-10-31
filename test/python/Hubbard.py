@@ -53,9 +53,13 @@ class test_hubbard(unittest.TestCase):
     # Solve Parameters
     sp = {}
     sp["h_int"] = U * n("up", 0) * n("down", 0)
+    sp["n_cycles"] = 100000
+    sp["length_cycle"] = 50
+    sp["n_warmup_cycles"] = 5000
     sp["max_time"] = -1
     sp["verbosity"] = 3
     sp["post_process"] = True
+    sp["measure_simple"] = True
 
     # Solve the impurity model
     S.solve(**sp)
