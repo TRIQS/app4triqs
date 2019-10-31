@@ -20,6 +20,7 @@
  *
  ******************************************************************************/
 #pragma once
+
 #include "./types.hpp"
 
 namespace app4triqs {
@@ -64,13 +65,36 @@ namespace app4triqs {
     /// Interaction Hamiltonian
     many_body_operator h_int;
 
-    // ----------- Solver Specific -----------
+    // ----------- QMC Specific -----------
+
+    /// Number of auxiliary spins
+    int n_s = 1;
+
+    /// Number of MC cycles
+    int n_cycles;
+
+    /// Length of a MC cycles
+    int length_cycle = 50;
+
+    /// Number of warmup cycles
+    int n_warmup_cycles = 5000;
+
+    /// Random seed of the random generator
+    int random_seed = 34788 + 928374 * mpi::communicator().rank();
+
+    /// Name of the random generator
+    std::string random_name = "";
 
     /// Maximum running time in seconds (-1 : no limit)
     int max_time = -1;
 
     /// Verbosity
     int verbosity = mpi::communicator().rank() == 0 ? 3 : 0;
+
+    // ----------- Measurements -----------
+
+    /// Measure the MC sign
+    bool measure_simple = true;
 
     /// Perform post processing
     bool post_process = true;

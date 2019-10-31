@@ -49,10 +49,14 @@ TEST(app4triqs, HubbardAtom) { // NOLINT
 
   // Solve Parameters
   solve_params_t sp;
-  sp.h_int        = U * n("up", 0) * n("down", 0);
-  sp.max_time     = -1;
-  sp.verbosity    = 3;
-  sp.post_process = true;
+  sp.h_int           = U * n("up", 0) * n("down", 0);
+  sp.n_cycles        = 100000;
+  sp.length_cycle    = 50;
+  sp.n_warmup_cycles = 5000;
+  sp.max_time        = -1;
+  sp.verbosity       = 3;
+  sp.post_process    = true;
+  sp.measure_simple  = true;
 
   // Solve the impurity model
   S.solve(sp);
