@@ -6,7 +6,6 @@ include(external_dependency.cmake)
 #       [VERSION <version-number>]
 #       [GIT_REPO <url>]
 #       [GIT_TAG <tag>]
-#       [BUILD_ALWAYS]
 #       [EXCLUDE_FROM_ALL]
 #   )
 #
@@ -26,9 +25,6 @@ include(external_dependency.cmake)
 # Addtional options:
 #
 #  GIT_TAG - Use this keyword to specify the git-tag, branch or commit hash
-#
-#  BUILD_ALWAYS - If set, this dependency will always be built from source
-#                 and will never be searched in the system.
 #
 #  EXCLUDE_FROM_ALL - If set, targets of the dependency cmake subproject
 #                     will not be included in the ALL target of the project.
@@ -53,7 +49,6 @@ if(PythonSupport OR Build_Documentation)
     GIT_REPO https://github.com/TRIQS/cpp2py
     VERSION 2.0
     GIT_TAG master
-    BUILD_ALWAYS
     EXCLUDE_FROM_ALL
   )
 endif()
@@ -62,6 +57,5 @@ endif()
 external_dependency(GTest
   GIT_REPO https://github.com/google/googletest
   GIT_TAG main
-  BUILD_ALWAYS
   EXCLUDE_FROM_ALL
 )
