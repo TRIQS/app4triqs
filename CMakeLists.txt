@@ -28,7 +28,7 @@ project(app4triqs VERSION 3.3.0 LANGUAGES CXX)
 get_directory_property(IS_SUBPROJECT PARENT_DIRECTORY)
 
 # ############
-# Load TRIQS and CPP2PY
+# Load TRIQS 
 find_package(TRIQS 3.3 REQUIRED)
 
 # Get the git hash & print status
@@ -70,6 +70,13 @@ endif()
 option(PythonSupport "Build with Python support" ON)
 if(PythonSupport AND NOT TRIQS_WITH_PYTHON_SUPPORT)
   message(FATAL_ERROR "TRIQS was installed without Python support. Cannot build the Python Interface. Disable the build with -DPythonSupport=OFF")
+endif()
+
+# Clair 
+option(Clair "Use Clair python bindings generators" OFF)
+if(Clair)
+  find_package(Clair REQUIRED)
+  MESSAGE(STATUS "Found Clair plugin. Will use it to compile.")
 endif()
 
 # Documentation

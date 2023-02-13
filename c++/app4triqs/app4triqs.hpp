@@ -3,6 +3,8 @@
 #include <triqs/mesh.hpp>
 #include <h5/h5.hpp>
 
+using namespace triqs::gfs;
+
 namespace app4triqs {
 
   /**
@@ -76,5 +78,22 @@ namespace app4triqs {
    *
    */
   int chain(int i, int j);
+
+
+  inline double sum_array(nda::array<double,2> const & a) { 
+    return sum(a);
+  }
+
+  inline nda::array<double,2> make_array(double i) { 
+    return {{1,i},{2,3}};
+  }
+
+  inline auto make_gf() { 
+    return gf<imfreq>{{10.0, Fermion}, {2, 2}};
+  }
+  
+  inline void print_gf(int i, gf<imfreq> const & g) { 
+    std::cout  << g << std::endl;
+  }
 
 } // namespace app4triqs

@@ -25,6 +25,6 @@ r"""
 DOC
 
 """
-from .app4triqs_module import Toto, chain
+from .app4triqs_module import Toto, chain, sum_array, make_array, make_gf, print_gf
 
-__all__ = ['Toto', 'chain']
+__all__ = ['Toto', 'chain', 'sum_array', 'make_array', 'make_gf', 'print_gf']
