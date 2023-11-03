@@ -54,6 +54,7 @@ jobs:
         clang-15
         g++-12
         gfortran
+        glibc-tools
         hdf5-tools
         libblas-dev
         libboost-dev
@@ -119,6 +120,7 @@ jobs:
       env:
         DYLD_FALLBACK_LIBRARY_PATH: /usr/local/opt/llvm/lib
         OPENBLAS_NUM_THREADS: "1"
+        LD_PRELOAD: /usr/lib/x86_64-linux-gnu/libSegFault.so
         PYTHONFAULTHANDLER: "1"
       run: |
         source $HOME/install/share/triqs/triqsvars.sh
