@@ -54,6 +54,7 @@ jobs:
         clang-15
         g++-12
         gfortran
+        glibc-tools
         hdf5-tools
         libblas-dev
         libboost-dev
@@ -101,7 +102,7 @@ jobs:
       run: |
         git clone https://github.com/TRIQS/triqs --branch unstable
         mkdir triqs/build && cd triqs/build
-        cmake .. -DBuild_Tests=OFF -DCMAKE_INSTALL_PREFIX=$HOME/install
+        cmake .. -DCMAKE_BUILD_TYPE=RelWithDebInfo -DBuild_Tests=OFF -DCMAKE_INSTALL_PREFIX=$HOME/install
         make -j1 install VERBOSE=1
         cd ../
 
@@ -119,6 +120,8 @@ jobs:
       env:
         DYLD_FALLBACK_LIBRARY_PATH: /usr/local/opt/llvm/lib
         OPENBLAS_NUM_THREADS: "1"
+        LD_PRELOAD: /usr/lib/x86_64-linux-gnu/libSegFault.so
+        PYTHONFAULTHANDLER: "1"
       run: |
         source $HOME/install/share/triqs/triqsvars.sh
         cd build
