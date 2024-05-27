@@ -2,9 +2,9 @@ name: build
 
 on:
   push:
-    branches: [ unstable, '[0-9]+.[0-9]+.x' ]
+    branches: [ notriqs, '[0-9]+.[0-9]+.x' ]
   pull_request:
-    branches: [ unstable, '[0-9]+.[0-9]+.x' ]
+    branches: [ notriqs, '[0-9]+.[0-9]+.x' ]
   workflow_call:
   workflow_dispatch:
 
@@ -56,7 +56,6 @@ jobs:
         gfortran
         hdf5-tools
         libblas-dev
-        libboost-dev
         libclang-15-dev
         libc++-15-dev
         libc++abi-15-dev
@@ -73,7 +72,6 @@ jobs:
         python3-clang-15
         python3-dev
         python3-mako
-        python3-matplotlib
         python3-mpi4py
         python3-numpy
         python3-pip
@@ -84,7 +82,7 @@ jobs:
     - name: Install homebrew dependencies
       if: matrix.os == 'macos-12'
       run: |
-        brew install ccache gcc@12 llvm boost fftw hdf5 open-mpi openblas
+        brew install ccache gcc@12 llvm hdf5 open-mpi openblas
         mkdir $HOME/.venv
         python3 -m venv $HOME/.venv/my_python
         source $HOME/.venv/my_python/bin/activate
@@ -99,25 +97,13 @@ jobs:
         echo "PATH=/usr/local/opt/llvm/bin:$PATH" >> $GITHUB_ENV
         echo "CXXFLAGS=-stdlib=libc++" >> $GITHUB_ENV
 
-    - name: Build & Install TRIQS
-      env:
-        CC: ${{ matrix.cc }}
-        CXX: ${{ matrix.cxx }}
-      run: |
-        git clone https://github.com/TRIQS/triqs --branch ${{ github.ref_name }}
-        mkdir triqs/build && cd triqs/build
-        cmake .. -DBuild_Tests=OFF -DCMAKE_INSTALL_PREFIX=$HOME/install
-        make -j1 install VERBOSE=1
-        cd ../
-
     - name: Build app4triqs
       env:
         CC: ${{ matrix.cc }}
         CXX: ${{ matrix.cxx }}
         LIBRARY_PATH: /usr/local/opt/llvm/lib
       run: |
-        source $HOME/install/share/triqs/triqsvars.sh
-        mkdir build && cd build && cmake ..
+        mkdir build && cd build && cmake .. -DCMAKE_INSTALL_PREFIX=$HOME/install
         make -j2 || make -j1 VERBOSE=1
 
     - name: Test app4triqs
@@ -125,7 +111,6 @@ jobs:
         DYLD_FALLBACK_LIBRARY_PATH: /usr/local/opt/llvm/lib
         OPENBLAS_NUM_THREADS: "1"
       run: |
-        source $HOME/install/share/triqs/triqsvars.sh
         cd build
         ctest -j2 --output-on-failure
 
