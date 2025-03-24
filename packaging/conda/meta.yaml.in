@@ -48,7 +48,7 @@ about:
   home: https://triqs.github.io/app4triqs
   license: GPL-3.0-or-later
   license_family: GPL
-  license_file: LICENSE.txt
+  license_file: LICENSE
   summary: 'An application based on the TRIQS library'
 
 extra:
