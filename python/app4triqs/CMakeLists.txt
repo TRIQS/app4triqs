@@ -27,6 +27,7 @@ foreach(module_src ${module_sources})
   set_target_properties(${module_name} PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/${module_dir})
   add_library(${PROJECT_NAME}::${module_name} ALIAS ${module_name})
   target_link_libraries(${module_name} PRIVATE ${PROJECT_NAME}_c ${PROJECT_NAME}_warnings triqs_py c2py::c2py)
+  set_property(GLOBAL APPEND PROPERTY ${PROJECT_NAME}_PYTHON_MODULES ${module_name})
 
   if(Update_Python_Bindings)
     set(wrap_cxx "${CMAKE_CURRENT_SOURCE_DIR}/${module_name}.wrap.cxx")

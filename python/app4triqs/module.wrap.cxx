@@ -28,7 +28,7 @@ template <> constexpr bool c2py::is_wrapped<app4triqs::toto> = true;
 // ==================== module classes =====================
 
 template <> inline const std::string c2py::cpp_name<app4triqs::toto>   = "app4triqs::toto";
-template <> inline constexpr auto c2py::tp_name<app4triqs::toto>       = "app4triqs.app4triqs_module.Toto";
+template <> inline constexpr auto c2py::tp_name<app4triqs::toto>       = "app4triqs.module.Toto";
 template <> inline constexpr const char *c2py::tp_doc<app4triqs::toto> = R"DOC(   A very useful and important class)DOC";
 
 static auto init_0 = c2py::dispatcher_c_kw_t{c2py::c_constructor<app4triqs::toto>(), c2py::c_constructor<app4triqs::toto, int>("i_")};
@@ -106,7 +106,7 @@ static PyMethodDef module_methods[] = {
 //// module doc directly in the code or "" if not present...
 /// Or mandatory ?
 static struct PyModuleDef module_def = {PyModuleDef_HEAD_INIT,
-                                        "app4triqs_module",                                         /* name of module */
+                                        "module",                                                   /* name of module */
                                         R"RAWDOC(Sample documentation for app4triqs module)RAWDOC", /* module documentation, may be NULL */
                                         -1, /* size of per-interpreter state of the module, or -1 if the module keeps state in global variables. */
                                         module_methods,
@@ -117,9 +117,9 @@ static struct PyModuleDef module_def = {PyModuleDef_HEAD_INIT,
 
 //--------------------- module init function -----------------------------
 
-extern "C" __attribute__((visibility("default"))) PyObject *PyInit_app4triqs_module() {
+extern "C" __attribute__((visibility("default"))) PyObject *PyInit_module() {
 
-  if (not c2py::check_python_version("app4triqs_module")) return NULL;
+  if (not c2py::check_python_version("module")) return NULL;
 
   // import numpy iff 'numpy/arrayobject.h' included
 #ifdef Py_ARRAYOBJECT_H
