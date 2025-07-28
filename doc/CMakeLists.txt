@@ -52,13 +52,9 @@ if(NOT DEFINED SPHINXBUILD_EXECUTABLE)
   find_package(Sphinx)
 endif()
 
-# Get Python modules that have been added
-get_property(python_modules GLOBAL PROPERTY ${PROJECT_NAME}_PYTHON_MODULES)
-message(STATUS "${PROJECT_NAME}_PYTHON_MODULES is defined: ${python_modules}")
-
 # Sphinx has internal caching, always run it
 add_custom_target(${PROJECT_NAME}_docs_sphinx ALL)
-add_dependencies(${PROJECT_NAME}_docs_sphinx ${PROJECT_NAME}_c ${python_modules})
+add_dependencies(${PROJECT_NAME}_docs_sphinx ${PROJECT_NAME}_c ${PROJECT_NAME}_python_modules)
 add_custom_command(
   TARGET ${PROJECT_NAME}_docs_sphinx POST_BUILD
   COMMAND PYTHONPATH=${PROJECT_BINARY_DIR}/python:$ENV{PYTHONPATH} ${SPHINXBUILD_EXECUTABLE} -j auto -c . -b html ${CMAKE_CURRENT_SOURCE_DIR} html
