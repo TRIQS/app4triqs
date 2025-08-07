@@ -39,7 +39,7 @@ Construct from integer
 Parameters
 ----------
 i_ : {par_0}
-   a scalar  :math:`G()`
+   a scalar :math:`G(\tau)`
 )DOC", {{c2py::python_typename<int>()}});
  // f
                              static auto const _c2py_fun_0 = c2py::dispatcher_f_kw_t{  c2py::cmethod([](_c2py_cls_0  & self , int u) -> decltype(auto) { return self.f(u); }, "self" ,  "u") };
@@ -51,7 +51,7 @@ i_ : {par_0}
                              static auto const _c2py_fun_2 = c2py::dispatcher_f_kw_t{  c2py::cfun([]() { return _c2py_cls_0::hdf5_format(); }   ) };
 
  static const auto _c2py_doc_0 = _c2py_fun_0.doc(R"DOC(
-A simple function with :math:`G()`
+A simple function with :math:`G(\tau)`
 
 Parameters
 ----------

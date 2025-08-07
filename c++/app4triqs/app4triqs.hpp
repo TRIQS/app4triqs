@@ -1,13 +1,22 @@
+/**
+ * @file
+ * @brief Provides various functions and classes for the **app4triqs** application.
+ */
+
 #pragma once
 #include <h5/h5.hpp>
 
 namespace app4triqs {
 
   /**
+   * @addtogroup mygroup
+   * @{
+   */
+
+  /**
    * A very useful and important class
    *
    * @note A Useful note
-   * @include app4triqs/app4triqs.hpp
    */
   class toto {
 
@@ -19,7 +28,7 @@ namespace app4triqs {
     /**
      * Construct from integer
      *
-     * @param i_ a scalar  :math:`G(\tau)`
+     * @param i_ a scalar \f$ G(\tau) \f$
      */
     explicit toto(int i_) : i(i_) {}
 
@@ -31,13 +40,13 @@ namespace app4triqs {
 
     /// Copy/Move assignment
     toto &operator=(toto const &) = default;
-    toto &operator=(toto &&) = default;
+    toto &operator=(toto &&)      = default;
 
     /// Simple accessor
     [[nodiscard]] int get_i() const { return i; }
 
     /** 
-     * A simple function with :math:`G(\tau)`
+     * A simple function with \f$ G(\tau) \f$
      *
      * @param u Nothing useful
      */
@@ -57,22 +66,23 @@ namespace app4triqs {
     friend void h5_read(h5::group grp, std::string subgroup_name, toto &m);
 
     /// Serialization
-    void serialize(auto &ar) const { ar &i; }
-    void deserialize(auto &ar) { ar &i; }
+    void serialize(auto &ar) const { ar & i; }
+    void deserialize(auto &ar) { ar & i; }
   };
 
   /**
-   * Chain digits of two integers
+   * @brief Chain digits of two integers
    *
-   * @head A set of functions that implement chaining
+   * @details A set of functions that implement chaining
    *
-   * @tail Do I really need to explain more ? 
+   * Do I really need to explain more ? 
    *
    * @param i The first integer
    * @param j The second integer
    * @return An integer containing the digits of both i and j
-   *
    */
   int chain(int i, int j);
+
+  /** @} */
 
 } // namespace app4triqs
