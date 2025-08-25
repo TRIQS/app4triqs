@@ -48,7 +48,10 @@ else()
 endif()
 
 # -- c2py --
-if(PythonSupport OR (NOT IS_SUBPROJECT AND Build_Documentation))
+# Resolve first: c2py runs find_package(Python) and exposes the interpreter and the
+# install-layout variables (Python_EXECUTABLE, PYTHON_LIB_DEST_ROOT, PYTHON_MODULE_EXT).
+# The NOT TARGET guard makes resolution order-independent (h5/nda also pull in c2py).
+if(PythonSupport AND NOT TARGET c2py)
   external_dependency(c2py
     GIT_REPO https://github.com/flatironinstitute/c2py
     GIT_TAG unstable
@@ -63,4 +66,11 @@ external_dependency(GTest
   GIT_TAG main
   BUILD_ALWAYS
   EXCLUDE_FROM_ALL
+)
+
+# -- h5 --
+external_dependency(h5
+  GIT_REPO https://github.com/TRIQS/h5
+  GIT_TAG unstable
+  BUILD_ALWAYS
 )

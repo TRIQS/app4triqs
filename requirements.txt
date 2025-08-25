@@ -2,10 +2,12 @@
 mako
 numpy
 scipy
-# For documentation builds we additionaly require
-#sphinx
-#numpydoc
-#nbsphinx
-#sphinx_rtd_theme
-#myst_parser
-#linkify-it-py
+
+# Documentation build (see doc/CMakeLists.txt)
+sphinx
+numpydoc
+nbsphinx
+myst-parser
+linkify-it-py
+sphinx-rtd-theme
+matplotlib
