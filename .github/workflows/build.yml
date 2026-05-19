@@ -26,8 +26,8 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - { os: ubuntu-24.04, cxx: clang++-19, clang_cxx: clang++-19 }
-          - { os: ubuntu-24.04, cxx: g++, clang_cxx: clang++-19 }
+          - { os: ubuntu-24.04, cxx: clang++-20, clang_cxx: clang++-20 }
+          - { os: ubuntu-24.04, cxx: g++, clang_cxx: clang++-20 }
           - { os: macos-15, cxx: clang++, clang_cxx: clang++ }
           - { os: macos-15, cxx: g++-15, clang_cxx: clang++ }
 
@@ -55,17 +55,17 @@ jobs:
         ccache
         cmake
         ninja-build
-        clang-19
-        clang-tools-19
+        clang-20
+        clang-tools-20
         g++
         gfortran
         hdf5-tools
         libboost-dev
-        llvm-19-dev
-        libclang-19-dev
-        libomp-19-dev
-        libc++-19-dev
-        libc++abi-19-dev
+        llvm-20-dev
+        libclang-20-dev
+        libomp-20-dev
+        libc++-20-dev
+        libc++abi-20-dev
         libfftw3-dev
         libgfortran5
         libgmp-dev
@@ -75,7 +75,7 @@ jobs:
         openmpi-bin
         openmpi-common
         openmpi-doc
-        python3-clang-19
+        python3-clang-20
         python3-dev
         python3-mako
         python3-matplotlib
@@ -111,15 +111,6 @@ jobs:
       run: |
         echo "CXXFLAGS=-stdlib=libc++" >> $GITHUB_ENV
 
-    - name: Build & Install TRIQS
-      env:
-        TRIQS_BRANCH: ${{ github.event_name == 'pull_request' && github.base_ref || github.ref_name }}
-      run: |
-        git ls-remote --exit-code --heads https://github.com/TRIQS/triqs "$TRIQS_BRANCH" > /dev/null 2>&1 || TRIQS_BRANCH=unstable
-        git clone https://github.com/TRIQS/triqs --branch "$TRIQS_BRANCH"
-        cmake -S triqs -B triqs/build -G Ninja -DBuild_Tests=OFF -DCMAKE_INSTALL_PREFIX=$HOME/install
-        cmake --build triqs/build --target install --verbose
-
     - name: Build & Install clair
       env:
         CXX: ${{ matrix.clang_cxx }}
@@ -128,6 +119,15 @@ jobs:
         git clone https://github.com/flatironinstitute/clair --branch unstable
         cmake -S clair -B clair/build -G Ninja -DBuild_Tests=OFF -DCMAKE_INSTALL_PREFIX=$HOME/install
         cmake --build clair/build --target install --verbose
+
+    - name: Build & Install TRIQS
+      env:
+        TRIQS_BRANCH: ${{ github.event_name == 'pull_request' && github.base_ref || github.ref_name }}
+      run: |
+        git ls-remote --exit-code --heads https://github.com/TRIQS/triqs "$TRIQS_BRANCH" > /dev/null 2>&1 || TRIQS_BRANCH=unstable
+        git clone https://github.com/TRIQS/triqs --branch "$TRIQS_BRANCH"
+        cmake -S triqs -B triqs/build -G Ninja -DBuild_Tests=OFF -DCMAKE_INSTALL_PREFIX=$HOME/install
+        cmake --build triqs/build --target install --verbose
 
     - name: Build app4triqs
       run: |
