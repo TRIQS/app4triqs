@@ -1,0 +1,54 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "app4triqs"
+description = "TRIQS application skeleton (python-only)"
+readme = "README.md"
+authors = [
+  { name = "TRIQS", email = "triqs@flatironinstitute.org" },
+]
+keywords = ["triqs"]
+requires-python = ">=3.10"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+    "numpy",
+    "scipy",
+]
+dynamic = ["version"]
+
+[project.optional-dependencies]
+test = ["pytest"]
+docs = [
+    "sphinx",
+    "numpydoc",
+    "nbsphinx",
+    "sphinx_rtd_theme",
+    "myst_parser",
+    "linkify-it-py",
+    "jupyter",
+    "matplotlib",
+]
+
+[project.urls]
+"Homepage" = "https://triqs.github.io/app4triqs"
+"Bug Tracker" = "https://github.com/triqs/app4triqs/issues"
+
+[tool.setuptools]
+include-package-data = false
+
+[tool.setuptools.packages.find]
+where = ["python"]
+
+[tool.setuptools.dynamic]
+version = { file = "VERSION" }
+
+[tool.pytest.ini_options]
+testpaths = ["test/python"]
+python_files = "[A-Z]*.py"
+python_classes = "Test*"

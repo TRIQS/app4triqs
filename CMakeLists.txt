@@ -24,7 +24,8 @@ cmake_policy(VERSION ${CMAKE_VERSION})
 
 # ############
 # Define Project
-project(app4triqs VERSION 4.0.0 LANGUAGES CXX)
+file(STRINGS "${CMAKE_CURRENT_SOURCE_DIR}/VERSION" PROJECT_VERSION_STRING)
+project(app4triqs VERSION ${PROJECT_VERSION_STRING} LANGUAGES CXX)
 get_directory_property(IS_SUBPROJECT PARENT_DIRECTORY)
 
 # ############
@@ -97,9 +98,6 @@ include(GNUInstallDirs)
 # #############
 # Build Project
 
-# Find / Build dependencies
-add_subdirectory(deps)
-
 # Tests
 if(Build_Tests)
   add_subdirectory(test)
@@ -115,9 +113,6 @@ endif()
 
 # Additional configuration files
 add_subdirectory(share)
-
-# add packaging for automatic versioning
-add_subdirectory(packaging)
 
 # #############
 # Debian Package

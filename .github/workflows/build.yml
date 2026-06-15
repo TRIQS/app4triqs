@@ -8,77 +8,48 @@ on:
   workflow_call:
   workflow_dispatch:
 
-env:
-  CMAKE_C_COMPILER_LAUNCHER: ccache
-  CMAKE_CXX_COMPILER_LAUNCHER: ccache
-  CCACHE_COMPILERCHECK: content
-  CCACHE_BASEDIR: ${{ github.workspace }}
-  CCACHE_DIR: ${{ github.workspace }}/.ccache
-  CCACHE_MAXSIZE: 500M
-  CCACHE_SLOPPINESS: pch_defines,time_macros,include_file_mtime,include_file_ctime
-  CCACHE_COMPRESS: "1"
-  CCACHE_COMPRESSLEVEL: "1"
-
 jobs:
   build:
-
     strategy:
       fail-fast: false
       matrix:
-        include:
-          - { os: ubuntu-24.04, cxx: clang++-20 }
-          - { os: ubuntu-24.04, cxx: g++-14 }
-          - { os: macos-15, cxx: clang++ }
-          - { os: macos-15, cxx: g++ }
+        os: [ubuntu-24.04, macos-15]
 
     runs-on: ${{ matrix.os }}
 
     steps:
     - uses: actions/checkout@v6
 
-    - uses: actions/cache/restore@v4
-      with:
-        path: ${{ env.CCACHE_DIR }}
-        key: ccache-${{ matrix.os }}-${{ matrix.cxx }}-${{ github.run_id }}-${{ github.run_attempt }}
-        restore-keys: |
-          ccache-${{ matrix.os }}-${{ matrix.cxx }}-
-
-    - name: Set up Linux environment
+    - name: Install ubuntu dependencies
       if: ${{ contains(matrix.os, 'ubuntu') }}
       run: >
         sudo apt-get update &&
-        sudo apt-get install lsb-release wget software-properties-common &&
         sudo apt-get install
-        ccache
         cmake
         ninja-build
-        clang-20
-        clang-tools-20
         g++
         gfortran
         hdf5-tools
         libboost-dev
-        libomp-20-dev
-        libc++-20-dev
-        libc++abi-20-dev
+        libomp-dev
         libfftw3-dev
-        libgfortran5
         libgmp-dev
         libhdf5-dev
         libopenblas-dev
         libopenmpi-dev
         openmpi-bin
         openmpi-common
-        openmpi-doc
         python3-dev
-        python3-mako
-        python3-matplotlib
         python3-mpi4py
         python3-numpy
         python3-pip
         python3-scipy
-        python3-ipython &&
-        echo "CXX=${{ matrix.cxx }}" >> $GITHUB_ENV
+
+    - name: Install homebrew dependencies
+      if: ${{ contains(matrix.os, 'macos') }}
+      run: |
+        brew update
+        brew install gcc llvm libomp boost fftw hdf5 open-mpi openblas mpi4py numpy scipy
 
     - name: Set up Python venv
       run: |
@@ -86,30 +57,6 @@ jobs:
         python3 -m venv --system-site-packages $HOME/.venv/my_python
         echo "VIRTUAL_ENV=$HOME/.venv/my_python" >> $GITHUB_ENV
         echo "$HOME/.venv/my_python/bin"         >> $GITHUB_PATH
-
-    - name: Set up macOS environment
-      if: ${{ contains(matrix.os, 'macos') }}
-      run: |
-        brew update
-        brew install ccache gcc llvm libomp boost fftw hdf5 open-mpi openblas
-        # Set CXX from the matrix; for gcc, resolve unversioned 'g++' to whatever g++-NN Homebrew installed
-        CXX=${{ matrix.cxx }}
-        if [[ $CXX == g++ ]]; then
-          CXX=$(basename "$(ls $(brew --prefix)/bin/g++-* | sort -V | tail -1)")
-        fi
-        echo "CXX=$CXX" >> $GITHUB_ENV
-        pip install mako numpy scipy mpi4py
-        pip install -r requirements.txt
-        echo "PATH=$(brew --prefix llvm)/bin:$(brew --prefix gcc)/bin:$PATH" >> $GITHUB_ENV
-        echo "PYTHONPATH=$(brew --prefix llvm)/lib/python3.13/site-packages" >> $GITHUB_ENV
-        echo "SDKROOT=$(xcrun --show-sdk-path)" >> $GITHUB_ENV
-        echo "CPPFLAGS=-I$(brew --prefix libomp)/include $CPPFLAGS" >> $GITHUB_ENV
-        echo "LDFLAGS=-L$(brew --prefix libomp)/lib -L$(brew --prefix llvm)/lib/c++ -L$(brew --prefix llvm)/lib/unwind -lunwind" >> $GITHUB_ENV
-
-    - name: Add clang CXXFLAGS
-      if: ${{ contains(matrix.cxx, 'clang') }}
-      run: |
-        echo "CXXFLAGS=-stdlib=libc++" >> $GITHUB_ENV
 
     - name: Build & Install TRIQS
       env:
@@ -123,26 +70,14 @@ jobs:
           -DCMAKE_INSTALL_PREFIX=$HOME/install
         cmake --build triqs/build --target install --verbose
 
-    - name: Build app4triqs
+    - name: Install app4triqs
       run: |
         source $HOME/install/share/triqs/triqsvars.sh
-        cmake -S . -B build -G Ninja
-        cmake --build build --verbose
+        pip install -e ".[test]"
 
     - name: Test app4triqs
       env:
         OPENBLAS_NUM_THREADS: "1"
       run: |
         source $HOME/install/share/triqs/triqsvars.sh
-        cd build
-        ctest -j2 --output-on-failure
-
-    - name: ccache statistics
-      if: always()
-      run: ccache -sv
-
-    - uses: actions/cache/save@v4
-      if: always()
-      with:
-        path: ${{ env.CCACHE_DIR }}
-        key: ccache-${{ matrix.os }}-${{ matrix.cxx }}-${{ github.run_id }}-${{ github.run_attempt }}
+        pytest test/python -v

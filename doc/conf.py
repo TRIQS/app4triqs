@@ -2,8 +2,13 @@
 #
 # TRIQS documentation build configuration file
 
+import os
 import sys
-sys.path.insert(0, "@CMAKE_CURRENT_SOURCE_DIR@/sphinxext")
+
+from app4triqs import __version__
+
+_HERE = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, os.path.join(_HERE, "sphinxext"))
 
 # exclude these folders from scanning by sphinx
 exclude_patterns = ['_templates']
@@ -47,8 +52,8 @@ source_suffix = {
 autosummary_generate = True
 autosummary_imported_members = False
 
-project = '@PROJECT_NAME@'
-version = '@PROJECT_VERSION@'
+project = 'app4triqs'
+version = __version__
 
 # this makes the current project version available as var in every rst file
 rst_epilog = """
@@ -60,15 +65,15 @@ version = version,
 copyright = '2018-2021 The Simons Foundation, authors: A. Hampel, O. Parcollet, D. Simons, H. Strand, N. Wentzell'
 
 mathjax_path = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=default"
-templates_path = ['@CMAKE_CURRENT_SOURCE_DIR@/_templates']
+templates_path = [os.path.join(_HERE, '_templates')]
 
 # this requires the sphinx_rtd_theme to be installed via pip
 html_theme = 'sphinx_rtd_theme'
 # this loads the custom css file to change the page width
 html_style = 'css/custom.css'
 
-html_favicon = '@CMAKE_CURRENT_SOURCE_DIR@/_static/triqs_logo/triqs_favicon.ico'
-#html_logo = '@CMAKE_CURRENT_SOURCE_DIR@/logos/logo.png'
+html_favicon = os.path.join(_HERE, '_static/triqs_logo/triqs_favicon.ico')
+#html_logo = os.path.join(_HERE, 'logos/logo.png')
 
 # options for the the rtd theme
 html_theme_options = {
@@ -88,12 +93,12 @@ html_theme_options = {
 
 html_show_sphinx = False
 
-html_context = {'header_title': '@PROJECT_NAME@'}
+html_context = {'header_title': 'app4triqs'}
 
-html_static_path = ['@CMAKE_CURRENT_SOURCE_DIR@/_static']
+html_static_path = [os.path.join(_HERE, '_static')]
 html_sidebars = {'index': ['sideb.html', 'searchbox.html']}
 
-htmlhelp_basename = '@PROJECT_NAME@doc'
+htmlhelp_basename = 'app4triqsdoc'
 
 # Plot options
 plot_include_source = True

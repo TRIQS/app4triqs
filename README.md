@@ -62,7 +62,7 @@ according to your needs (replace app4triqs in the following by the name of your 
 * In the `python/app4triqs` subdirectory add your Python source files.
 * In the `test/python` subdirectory adjust the example test `Basic.py` or add your own tests.
 * Adjust any documentation examples given as `*.rst` files in the doc directory.
-* Adjust the sphinx configuration in `doc/conf.py.in` as necessary.
+* Adjust the sphinx configuration in `doc/conf.py` as necessary.
 * The build and install process is identical to the one outline [here](https://triqs.github.io/app4triqs/unstable/install.html).
 
 ### Optional ###

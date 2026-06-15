@@ -2,3 +2,9 @@ compile_commands.json
 doc/_autosummary
 doc/cpp2rst_generated
 .claude
+build*/
+dist/
+python/*.egg-info/
+__pycache__/
+*.pyc
+deps/

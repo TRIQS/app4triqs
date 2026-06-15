@@ -25,4 +25,11 @@ r"""
 DOC
 
 """
-__all__ = []
+
+try:
+    from ._version import __version__
+except ImportError:
+    from importlib.metadata import version as _v
+    __version__ = _v(__name__)
+
+__all__ = ["__version__"]

@@ -10,32 +10,18 @@ jobs:
   build:
     name: Build distribution 📦
     runs-on: ubuntu-latest
-    container:   # we have to provide a working triqs installation to make the cmake step work
-      image: flatironinstitute/triqs:${{github.ref_name}}
-
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6
     - name: Set up Python
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v6
       with:
         python-version: "3.x"
     - name: Install pypa/build
-      run: >-
-        python3 -m
-        pip install
-        build toml
-        --user
-    - name: prepare python distribution
-      run: |
-        mkdir build && cd build 
-        cmake ../
-        cp packaging/pypi/* ../
-        mv python/app4triqs/version.py ../python/app4triqs/version.py
-        rm ../python/app4triqs/version.py.in
+      run: python3 -m pip install --user build
     - name: Build a binary wheel and a source tarball
       run: python3 -m build
     - name: Store the distribution packages
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v7
       with:
         name: python-package-distributions
         path: dist/
@@ -49,11 +35,11 @@ jobs:
       name: pypi
       url: https://pypi.org/p/app4triqs
     permissions:
-      id-token: write  # IMPORTANT: mandatory for trusted publishing
+      id-token: write  # mandatory for trusted publishing
 
     steps:
     - name: Download all the dists
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v8
       with:
         name: python-package-distributions
         path: dist/
@@ -61,4 +47,3 @@ jobs:
       uses: pypa/gh-action-pypi-publish@release/v1
       with:
         skip-existing: true # skip if version name package already exists on pypi
-
